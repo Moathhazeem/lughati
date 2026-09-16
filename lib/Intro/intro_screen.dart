@@ -35,9 +35,9 @@ class _IntroScreenState extends State<IntroScreen> {
       description: '5 minutes a day is all it takes. Get personalized, AI-driven lessons tailored to your pace and goals.',
     ),
     OnboardingItem(
-      image: 'assets/photo/intro.jpg',
-      title: 'Track your progress seamlessly',
-      description: 'Stay motivated with daily streaks and clear insights into your language mastery journey.',
+      image: 'assets/photo/Introduction page Three.jpg',
+      title: 'Connect with the world without borders',
+      description: 'Join our global community, practice with native speakers, and unlock new opportunities for study, work, or travel.',
     ),
   ];
   
@@ -94,13 +94,16 @@ class _IntroScreenState extends State<IntroScreen> {
                   itemBuilder: (context, index) {
                     final item = _items[index];
                     return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Spacer(),
                         Center(
-                          child: Image.asset(
-                            item.image,
-                            height: 280,
-                            fit: BoxFit.contain,
+                          child: ClipOval(
+                            child: Image.asset(
+                              item.image,
+                              height: 280,
+                              width: 280,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                         const SizedBox(height: 12),
@@ -119,7 +122,7 @@ class _IntroScreenState extends State<IntroScreen> {
                           item.description,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
-                            fontSize: 14,
+                            fontSize: 18,
                             color: Colors.grey,
                             height: 1.4,
                           ),
@@ -148,23 +151,39 @@ class _IntroScreenState extends State<IntroScreen> {
               ),
               const SizedBox(height: 28),
               ElevatedButton(
-                onPressed: _onNextPressed,
+                onPressed: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SignUpScreen()),
+                  );
+                },
+                child: const Text('Get Started'),
+              );
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFE0F2FE),
+                  backgroundColor: _currentIndex == _items.length - 1 ? const Color(0xFF0066FF): const Color(0xFFE0F2FE),
                   elevation: 0,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Row(
+                child: _currentIndex == _items.length - 1 
+                ? const Text(
+                  'Get Started',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
+                )
+                : const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       'Continue',
                       style: TextStyle(
                         color: Color(0xFF2563EB),
-                        fontSize: 16,
+                        fontSize: 20,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
