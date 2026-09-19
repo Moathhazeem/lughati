@@ -7,7 +7,7 @@ class SignUpScreen extends StatefulWidget {
   State<SignUpScreen> createState() {
     return _SignUpScreenState();
   }
-};
+}
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
@@ -28,7 +28,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
-  };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           child: Form(
             key: _formKey,
             child: Column(
-              crossAxisAlignment: CrossAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // 1. اللوجو العلوي
                 Center(
@@ -69,7 +69,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const Center(
                   child: Column(
                     children: [
-                      Text(
+                      const Text(
                         'Create Account',
                         style: TextStyle(
                           fontSize: 26,
@@ -77,8 +77,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           color: Colors.black,
                         ),
                       ),
-                      SizedBox(height: 8),
-                      Text(
+                      const SizedBox(height: 8),
+                      const Text(
                         'Start your language journey today.',
                         style: TextStyle(
                           fontSize: 14,
@@ -219,7 +219,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Expanded(child: Divider(color: Colors.grey, thickness: 0.5)),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12),
-                      child: Text('or continue with', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                      child: const Text('or continue with', style: TextStyle(color: Colors.grey, fontSize: 12)),
                     ),
                     Expanded(child: Divider(color: Colors.grey, thickness: 0.5)),
                   ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'sign_up.dart';
 
 class OnboardingItem {
   final String image;
@@ -48,7 +49,11 @@ class _IntroScreenState extends State<IntroScreen> {
         curve: Curves.easeInOut,
       );
     } else {
-      // Navigate when screens are finished
+      // Navigate to sign up screen when on the last page
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const SignUpScreen()),
+      );
     }
   }
   
@@ -74,7 +79,12 @@ class _IntroScreenState extends State<IntroScreen> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const SignUpScreen()),
+                      );
+                    },
                     child: const Text(
                       'Skip',
                       style: TextStyle(color: Colors.grey, fontSize: 16),
@@ -151,14 +161,7 @@ class _IntroScreenState extends State<IntroScreen> {
               ),
               const SizedBox(height: 28),
               ElevatedButton(
-                onPressed: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const SignUpScreen()),
-                  );
-                },
-                child: const Text('Get Started'),
-              );
+                onPressed: _onNextPressed,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: _currentIndex == _items.length - 1 ? const Color(0xFF0066FF): const Color(0xFFE0F2FE),
                   elevation: 0,
