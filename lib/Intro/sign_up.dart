@@ -99,6 +99,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     hintText: 'Moath hazeem',
                     prefixIcon: Icons.person_outline,
                   ),
+                  validator: (value){
+                    if(value == null || value.trim().isEmpty){
+                      return 'Please enter your full name';
+                    }
+                    if (value.trim().split(' ').length < 2){
+                      return 'Please enter at least a first and last name';
+                    }
+                    if(value.trim().length < 3){
+                      return 'Name must be at least 3 characters long';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 16),
 
@@ -112,6 +124,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     hintText: 'Moathhazeem661@gmail.com',
                     prefixIcon: Icons.email_outlined,
                   ),
+                  validator:(value){
+                    if(value == null || value.trim().isEmpty){
+                      return 'Please enter your email';
+                    }
+                    if(!value.toLowerCase().contains('@gmail.com')){
+                      return 'Email must contain @gmail.com';
+                    }
+                    if(value.trim().length < 3){
+                      return 'Email must be at least 3 characters long';
+                    }
+                    return null;
+                  }
                 ),
                 const SizedBox(height: 16),
 
@@ -136,6 +160,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       },
                     ),
                   ),
+                  validator:(value){
+                    if(value == null|| value.trim().isEmpty){
+                      return 'Please enter your password';
+                    }
+                    if(value.length < 8){
+                      return 'Please make your pasword at least 8 characters';
+                    }
+                    if(!value.contains(RegExp(r'[A-Z]'))){
+                      return 'Password must contain an uppercase letter';
+                    }
+                    if(!value.contains(RegExp(r'[a-z]'))){
+                      return 'Password must contain an lowercase letter';
+                    }
+                    if(!value.contains(RegExp(r'[0-9]'))){
+                      return 'Password must contain a number';
+                    }
+                    if(!value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))){
+                      return 'Password must contain a special character';
+                    }
+                    return null;
+                  }
                 ),
                 const SizedBox(height: 16),
 
@@ -160,6 +205,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       },
                     ),
                   ),
+                  validator: (value){
+                    if(value == null || value.isEmpty){
+                      return 'Please confirm your password';
+                    }
+                    if(value != _passwordController.text){
+                      return 'Password do not match';
+                    }
+                    return null; 
+                  }
                 ),
                 const SizedBox(height: 16),
 
@@ -197,7 +251,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   width: double.infinity,
                   height: 52,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        // All validations passed, proceed with sign up
+                        // Add your sign up logic here
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Sign up successful!')),
+                        );
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF0066FF),
                       shape: RoundedRectangleBorder(
