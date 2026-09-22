@@ -103,6 +103,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     if(value == null || value.trim().isEmpty){
                       return 'Please enter your full name';
                     }
+                    if(!RegExp(r'[a-zA-Z\s]+$').hasMatch(value.trim())){
+                      return 'Name can only contain letters and spaces';
+                    }
                     if (value.trim().split(' ').length < 2){
                       return 'Please enter at least a first and last name';
                     }
