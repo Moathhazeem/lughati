@@ -69,7 +69,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const Center(
                   child: Column(
                     children: [
-                      const Text(
+                      Text(
                         'Create Account',
                         style: TextStyle(
                           fontSize: 26,
@@ -77,8 +77,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           color: Colors.black,
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      const Text(
+                      SizedBox(height: 8),
+                      Text(
                         'Start your language journey today.',
                         style: TextStyle(
                           fontSize: 14,
@@ -194,7 +194,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   controller: _confirmPasswordController,
                   obscureText: _isConfirmPasswordObscured,
                   decoration: _buildInputDecoration(
-                    hintText: '059##\$\$\%^^#@ssdswwe21',
+                    hintText: '059##\$\$%^^#@ssdswwe21',
                     prefixIcon: Icons.key_outlined,
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -284,7 +284,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Expanded(child: Divider(color: Colors.grey, thickness: 0.5)),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12),
-                      child: const Text('or continue with', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                      child: Text('or continue with', style: TextStyle(color: Colors.grey, fontSize: 12)),
                     ),
                     Expanded(child: Divider(color: Colors.grey, thickness: 0.5)),
                   ],
