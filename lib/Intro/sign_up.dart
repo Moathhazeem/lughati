@@ -20,6 +20,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   bool _isPasswordObscured = true;
   bool _isConfirmPasswordObscured = true;
+  
+  // Password requirement states
+  bool hasMinLength = false;
+  bool hasUppercase = false;
+  bool hasLowercase = false;
+  bool hasNumber = false;
+  bool hasSpecialChar = false;
 
   @override
   void dispose() {
@@ -163,27 +170,54 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       },
                     ),
                   ),
-                  validator:(value){
-                    if(value == null|| value.trim().isEmpty){
+                  onChanged: (value) {
+                    setState(() {
+                      hasMinLength = value.length >= 8;
+                      hasUppercase = value.contains(RegExp(r'[A-Z]'));
+                      hasLowercase = value.contains(RegExp(r'[a-z]'));
+                      hasNumber = value.contains(RegExp(r'[0-9]'));
+                      hasSpecialChar = value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
                       return 'Please enter your password';
                     }
-                    if(value.length < 8){
-                      return 'Please make your pasword at least 8 characters';
-                    }
-                    if(!value.contains(RegExp(r'[A-Z]'))){
-                      return 'Password must contain an uppercase letter';
-                    }
-                    if(!value.contains(RegExp(r'[a-z]'))){
-                      return 'Password must contain an lowercase letter';
-                    }
-                    if(!value.contains(RegExp(r'[0-9]'))){
-                      return 'Password must contain a number';
-                    }
-                    if(!value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))){
-                      return 'Password must contain a special character';
+
+                    if (value.length < 8 ||
+                        !value.contains(RegExp(r'[A-Z]')) ||
+                        !value.contains(RegExp(r'[a-z]')) ||
+                        !value.contains(RegExp(r'[0-9]')) ||
+                        !value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+                      return 'Please meet all password requirements';
                     }
                     return null;
-                  }
+                  },
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    PasswordRequirement(
+                      text: 'At least 8 characters',
+                      isValid: hasMinLength,
+                    ),
+                    PasswordRequirement(
+                      text: 'One uppercase letter',
+                      isValid: hasUppercase,
+                    ),
+                    PasswordRequirement(
+                      text: 'One lowercase letter',
+                      isValid: hasLowercase,
+                    ),
+                    PasswordRequirement(
+                      text: 'One number',
+                      isValid: hasNumber,
+                    ),
+                    PasswordRequirement(
+                      text: 'One special character',
+                      isValid: hasSpecialChar,
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 16),
 
@@ -394,6 +428,42 @@ class _SignUpScreenState extends State<SignUpScreen> {
       label: Text(
         label,
         style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+}
+
+// Widget لعرض متطلبات كلمة المرور
+class PasswordRequirement extends StatelessWidget {
+  final String text;
+  final bool isValid;
+
+  const PasswordRequirement({
+    super.key,
+    required this.text,
+    required this.isValid,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Row(
+        children: [
+          Icon(
+            isValid ? Icons.check_circle : Icons.circle_outlined,
+            color: isValid ? Colors.green : Colors.grey,
+            size: 16,
+          ),
+          const SizedBox(width: 8),
+          Text(
+            text,
+            style: TextStyle(
+              color: isValid ? Colors.green : Colors.grey,
+              fontSize: 12,
+            ),
+          ),
+        ],
       ),
     );
   }
