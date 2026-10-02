@@ -54,9 +54,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     if (_passwordController.text != _confirmPasswordController.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Passwords do not match')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Passwords do not match')),
+        );
+      }
       return;
     }
     final url = Uri.parse('https://lughati.com/api/register');
@@ -75,16 +77,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
       final data = jsonDecode(response.body);
       if (response.statusCode == 201 && data['success'] == true) {
         String token = data['token'];
-        print('User registered successfully! Token: $token');
+        debugPrint('User registered successfully! Token: $token');
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(data['message'] ?? 'Failed to register user')),
-        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(data['message'] ?? 'Failed to register user')),
+          );
+        }
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to register user')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to register user')),
+        );
+      }
     }
   }
 
