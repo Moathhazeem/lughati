@@ -28,14 +28,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool hasNumber = false;
   bool hasSpecialChar = false;
   bool hasStartedTyping = false;
-
+  late FocusNode _passwordFocusNode;
+  
+  @override
+  void initState() {
+    super.initState();
+    _passwordFocusNode = FocusNode();
+    _passwordFocusNode.addListener(() {
+      setState(() {});
+    });
+  }
   @override
   void dispose() {
     _fullNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _passwordFocusNode.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
+
   }
 
   @override
@@ -155,6 +168,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(height: 8),
                 TextFormField(
                   controller: _passwordController,
+                  focusNode: _passwordFocusNode,
                   obscureText: _isPasswordObscured,
                   decoration: _buildInputDecoration(
                     hintText: '****************',
@@ -196,7 +210,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     return null;
                   },
                 ),
-                if(_passwordController.text.isNotEmpty) ...[
+                if(_passwordController.text.isNotEmpty || _passwordFocusNode.hasFocus) ...[
                   const SizedBox(height:8),
                   Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,27 +218,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     PasswordRequirement(
                       text: 'At least 8 characters',
                       isValid: hasMinLength,
-                      hasStartedTyping: hasStartedTyping,
+                      hasStartedTyping: _passwordController.text.isNotEmpty,
                     ),
                     PasswordRequirement(
                       text: 'One uppercase letter',
                       isValid: hasUppercase,
-                      hasStartedTyping: hasStartedTyping,
+                      hasStartedTyping: _passwordController.text.isNotEmpty,
                     ),
                     PasswordRequirement(
                       text: 'One lowercase letter',
                       isValid: hasLowercase,
-                      hasStartedTyping: hasStartedTyping,
+                      hasStartedTyping: _passwordController.text.isNotEmpty,
                     ),
                     PasswordRequirement(
                       text: 'One number',
                       isValid: hasNumber,
-                      hasStartedTyping: hasStartedTyping,
+                      hasStartedTyping: _passwordController.text.isNotEmpty,
                     ),
                     PasswordRequirement(
                       text: 'One special character',
                       isValid: hasSpecialChar,
-                      hasStartedTyping: hasStartedTyping,
+                      hasStartedTyping: _passwordController.text.isNotEmpty,
                     ),
                   ],
                 ),
