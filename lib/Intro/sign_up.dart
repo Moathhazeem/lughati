@@ -27,6 +27,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool hasLowercase = false;
   bool hasNumber = false;
   bool hasSpecialChar = false;
+  bool hasStartedTyping = false;
 
   @override
   void dispose() {
@@ -172,6 +173,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   onChanged: (value) {
                     setState(() {
+                      hasStartedTyping = value.isNotEmpty;
                       hasMinLength = value.length >= 8;
                       hasUppercase = value.contains(RegExp(r'[A-Z]'));
                       hasLowercase = value.contains(RegExp(r'[a-z]'));
@@ -194,31 +196,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     return null;
                   },
                 ),
-                Column(
+                if(_passwordController.text.isNotEmpty) ...[
+                  const SizedBox(height:8),
+                  Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     PasswordRequirement(
                       text: 'At least 8 characters',
                       isValid: hasMinLength,
+                      hasStartedTyping: hasStartedTyping,
                     ),
                     PasswordRequirement(
                       text: 'One uppercase letter',
                       isValid: hasUppercase,
+                      hasStartedTyping: hasStartedTyping,
                     ),
                     PasswordRequirement(
                       text: 'One lowercase letter',
                       isValid: hasLowercase,
+                      hasStartedTyping: hasStartedTyping,
                     ),
                     PasswordRequirement(
                       text: 'One number',
                       isValid: hasNumber,
+                      hasStartedTyping: hasStartedTyping,
                     ),
                     PasswordRequirement(
                       text: 'One special character',
                       isValid: hasSpecialChar,
+                      hasStartedTyping: hasStartedTyping,
                     ),
                   ],
                 ),
+              ],
                 const SizedBox(height: 16),
 
                 // 6. حقل Confirm Password
@@ -437,30 +447,44 @@ class _SignUpScreenState extends State<SignUpScreen> {
 class PasswordRequirement extends StatelessWidget {
   final String text;
   final bool isValid;
+  final bool hasStartedTyping;
 
   const PasswordRequirement({
     super.key,
     required this.text,
     required this.isValid,
+    required this.hasStartedTyping,
   });
 
   @override
   Widget build(BuildContext context) {
+    IconData icon;
+    Color iconColor;
+    if(!hasStartedTyping){
+      icon = Icons.radio_button_unchecked;
+      iconColor = Colors.grey;
+    } else if(isValid){
+      icon = Icons.check_circle;
+      iconColor = Colors.green;
+    } else {
+      icon = Icons.cancel;
+      iconColor = Colors.red;
+    }
     return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
+      padding: const EdgeInsets.symmetric(vertical: 2.0),
       child: Row(
         children: [
           Icon(
-            isValid ? Icons.check_circle : Icons.circle_outlined,
-            color: isValid ? Colors.green : Colors.grey,
-            size: 16,
+            icon,
+            color: iconColor,
+            size: 18,
           ),
           const SizedBox(width: 8),
           Text(
             text,
             style: TextStyle(
-              color: isValid ? Colors.green : Colors.grey,
-              fontSize: 12,
+              color: !hasStartedTyping ? Colors.grey : (isValid ? Colors.green : Colors.red),
+              fontSize: 13,
             ),
           ),
         ],
