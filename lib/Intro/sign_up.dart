@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 
 class SignUpScreen extends StatefulWidget {
@@ -23,6 +24,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   bool _isPasswordObscured = true;
   bool _isConfirmPasswordObscured = true;
+  
+  // Google Sign-In
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
   
   // Password requirement states
   bool hasMinLength = false;
@@ -94,6 +98,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
       }
     }
   }
+
+  Future<void> _signInWithGoogle() async {
+  try {
+    // استخدم الكائن الموجود في الأعلى مباشرة
+    final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+    if (googleUser == null) return;
+
+    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    final String? idToken = googleAuth.idToken;
+
+    if (idToken == null) return;
+
+    final url = Uri.parse('http://localhost:5000/api/auth/google');
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'idToken': idToken}),
+    );
+
+    final data = jsonDecode(response.body);
+
+    if (response.statusCode == 200 && data['success'] == true) {
+      debugPrint('Google Login Successful: ${data['user']}');
+    } else {
+      debugPrint('Server Error: ${data['message']}');
+    }
+  } catch (error) {
+    debugPrint('Google Sign-In Error: $error');
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -219,7 +253,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     prefixIcon: Icons.lock_outline,
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _isPasswordObscured ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                        _isPasswordObscured ? Icons.visibility_off_outlined : Icons.visibility_outlined,
                         color: Colors.grey,
                       ),
                       onPressed: () {
@@ -392,7 +426,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       child: _buildSocialButton(
                         label: 'Google',
                         icon: Icons.g_mobiledata, // يمكنك استبدالها بـ Image.asset للوجو Google
-                        onPressed: () {},
+                        onPressed: _signInWithGoogle,
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -402,7 +436,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         icon: Icons.facebook,
                         color: const Color(0xFF4267B2),
                         textColor: Colors.white,
-                        onPressed: () {},
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Facebook login not yet implemented')),
+                          );
+                        },
                       ),
                     ),
                   ],
