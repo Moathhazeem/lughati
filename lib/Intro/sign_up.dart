@@ -62,7 +62,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       }
       return;
     }
-    final url = Uri.parse('https://lughati.com/api/register');
+    final url = Uri.parse('http://localhost:5000/api/auth/register');
 
     try {
       final response = await http.post(
